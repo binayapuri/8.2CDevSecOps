@@ -27,7 +27,7 @@ exports.index = function (req, res, next) {
       if (err) return next(err);
 
       res.render('index', {
-        title: 'Patch TODO List',
+        title: 'Patch TODO List CHANGES1',
         subhead: 'Vulnerabilities at their best',
         todos: todos,
       });
