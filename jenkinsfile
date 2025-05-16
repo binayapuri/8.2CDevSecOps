@@ -16,19 +16,19 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh 'npm test || true'
+                sh 'npm test || true' // Continue even if tests fail
             }
         }
 
         stage('Generate Coverage Report') {
             steps {
-                sh 'npm run coverage || true'
+                sh 'npm run coverage || true' // Avoid pipeline failure if script missing
             }
         }
 
         stage('NPM Audit (Security Scan)') {
             steps {
-                sh 'npm audit || true'
+                sh 'npm audit || true' // Show vulnerabilities
             }
         }
 
@@ -36,9 +36,8 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                     sh '''
-                        wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
-                        unzip sonar-scanner-cli-4.7.0.2747-linux.zip
-                        ./sonar-scanner-4.7.0.2747-linux/bin/sonar-scanner -Dsonar.login=$SONAR_TOKEN
+                      npm install -g sonar-scanner
+                      sonar-scanner -Dsonar.login=$SONAR_TOKEN
                     '''
                 }
             }
